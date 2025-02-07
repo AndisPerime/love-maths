@@ -44,8 +44,13 @@ function runGame(gameType) {
         displayMultiplyQuestion(num1, num2);
     } else if (gameType === "subtract" ) {
         displaySubtractQuestion(num1, num2);
-    } else if (gameType === "division"){
-	    displayDivisionQuestion(num1,num2);
+    } else if (gameType === "division") {
+        // Ensure num2 is not zero to avoid division by zero
+        num2 = num2 === 0 ? 1 : num2;
+        // Make sure we get a larger first number by multiplying
+        let dividend = num1 * num2;
+        // Always display larger number first
+        displayDivisionQuestion(Math.max(dividend, num2), Math.min(dividend, num2));
     } else {
         alert(`Unknown game type: ${gameType}`);
         throw `Unknown game type: ${gameType}. Aborting!`;
@@ -91,8 +96,8 @@ function calculateCorrectAnswer() {
         return [operand1 * operand2, "multiply"];
     } else if (operator === "-") {
         return [operand1 - operand2, "subtract"];
-    } else if (operator ==="/") {
-		return [operand1 / operand2, "division"];
+    } else if (operator === "÷") {
+        return [operand1 / operand2, "division"];
     } else {
         alert(`Unimplemented operator ${operator}`);
         throw `Unimplemented operator ${operator}. Aborting!`;
@@ -146,8 +151,11 @@ function displayMultiplyQuestion(operand1, operand2) {
 
 // Add your division question here
 function displayDivisionQuestion(operand1, operand2) {
-    operand1 = operand1 * operand2;
-    document.getElementById("operand1").textContent = operand1;
-    document.getElementById("operand2").textContent = operand2;
-    document.getElementById("operator").textContent = "/";
+    // Ensure the larger number is always operand1
+    if (operand2 > operand1) {
+        [operand1, operand2] = [operand2, operand1];
+    }
+    document.getElementById('operand1').textContent = operand1;
+    document.getElementById('operand2').textContent = operand2;
+    document.getElementById('operator').textContent = "÷";
 }
